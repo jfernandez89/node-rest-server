@@ -1,8 +1,10 @@
-// Config //
+// Port config //
 require("./config");
 
-// Express //
+const mongoose = require("mongoose");
 const express = require("express");
+
+// Express //
 const app = express();
 
 // Body parser //
@@ -42,6 +44,24 @@ app.put("/user/:id", function (req, res) {
 // DELETE //
 app.delete("/user", function (req, res) {
   res.json("Delete user");
+});
+
+// DATABASE //
+mongoose.connect("mongodb://localhost:27017/express", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+});
+
+const db = mongoose.connection;
+
+db.on("error", () => {
+  console.log("Connection error");
+});
+
+db.once("open", () => {
+  console.log("Database connected!");
 });
 
 // PORT //
