@@ -1,0 +1,28 @@
+{
+  "name": "rest-server-app",
+  "version": "1.0.0",
+  "description": "In this app we are going to create a CRUD, using node.js with its framework express and mongodb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jfernandez89/node-rest-server.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongodb"
+  ],
+  "author": "jfernandez89",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jfernandez89/node-rest-server/issues"
+  },
+  "homepage": "https://github.com/jfernandez89/node-rest-server#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
+}
