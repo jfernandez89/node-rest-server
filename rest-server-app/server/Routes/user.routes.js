@@ -96,8 +96,31 @@ app.put("/user/:id", function (req, res) {
 });
 
 // DELETE //
-app.delete("/user", function (req, res) {
-  res.json("Delete user");
+app.delete("/user/:id", function (req, res) {
+  let id = req.params.id;
+
+  User.findByIdAndRemove(id, (error, userDB) => {
+    if (error) {
+      return res.status(400).json({
+        done: false,
+        error,
+      });
+    }
+
+    if (userDB === null) {
+      return res.status(400).json({
+        done: false,
+        error: {
+          message: "User not found",
+        },
+      });
+    }
+
+    res.json({
+      done: true,
+      userDB,
+    });
+  });
 });
 
 module.exports = app;
