@@ -11,8 +11,8 @@ app.get("/user", function (req, res) {
   // Pagination: 20 records per petition
   let pageSize = Number(req.query.pageSize) || 2;
 
-  // Only returns the name, email and state
-  User.find({}, "name email state")
+  // Only returns the name, email and state from active users
+  User.find({ state: true }, "name email state")
     .skip(pageIndex)
     .limit(pageSize)
     .exec((error, usersDB) => {
@@ -23,7 +23,7 @@ app.get("/user", function (req, res) {
         });
       }
 
-      User.count({}, (error, totalUsers) => {
+      User.count({ state: true }, (error, totalUsers) => {
         res.json({
           done: true,
           usersDB,
@@ -99,28 +99,34 @@ app.put("/user/:id", function (req, res) {
 app.delete("/user/:id", function (req, res) {
   let id = req.params.id;
 
-  User.findByIdAndRemove(id, (error, userDB) => {
-    if (error) {
-      return res.status(400).json({
-        done: false,
-        error,
+  // Changes the user state to false and returns the user updated
+  User.findByIdAndUpdate(
+    id,
+    { state: false },
+    { new: true },
+    (error, userDB) => {
+      if (error) {
+        return res.status(400).json({
+          done: false,
+          error,
+        });
+      }
+
+      if (userDB === null) {
+        return res.status(400).json({
+          done: false,
+          error: {
+            message: "User not found",
+          },
+        });
+      }
+
+      res.json({
+        done: true,
+        userDB,
       });
     }
-
-    if (userDB === null) {
-      return res.status(400).json({
-        done: false,
-        error: {
-          message: "User not found",
-        },
-      });
-    }
-
-    res.json({
-      done: true,
-      userDB,
-    });
-  });
+  );
 });
 
 module.exports = app;
