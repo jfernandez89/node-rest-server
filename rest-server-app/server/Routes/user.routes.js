@@ -6,7 +6,31 @@ const bcrypt = require("bcrypt");
 
 // GET //
 app.get("/user", function (req, res) {
-  res.json("Get user");
+  // Indicates in which page we are
+  let pageIndex = Number(req.query.pageIndex) || 0;
+  // Pagination: 20 records per petition
+  let pageSize = Number(req.query.pageSize) || 2;
+
+  // Only returns the name, email and state
+  User.find({}, "name email state")
+    .skip(pageIndex)
+    .limit(pageSize)
+    .exec((error, usersDB) => {
+      if (error) {
+        return res.status(400).json({
+          done: false,
+          error,
+        });
+      }
+
+      User.count({}, (error, totalUsers) => {
+        res.json({
+          done: true,
+          usersDB,
+          totalUsers,
+        });
+      });
+    });
 });
 
 // POST //

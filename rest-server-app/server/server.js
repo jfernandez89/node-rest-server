@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Parse application/json
 app.use(bodyParser.json());
 
-// CONTROLLERS //
-app.use(require("./Controllers/userController"));
+// ROUTES //
+app.use(require("./Routes/user.routes"));
 
 // DATABASE //
 mongoose.connect("mongodb://localhost:27017/express", {

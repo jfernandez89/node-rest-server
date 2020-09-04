@@ -4,7 +4,8 @@
   "description": "In this app we are going to create a CRUD, using node.js with its framework express and mongodb",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server/server.js "
   },
   "repository": {
     "type": "git",
