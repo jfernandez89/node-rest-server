@@ -1,6 +1,8 @@
 // Express //
 const express = require("express");
 const app = express();
+const User = require("../Models/User");
+const bcrypt = require("bcrypt");
 
 // GET //
 app.get("/user", function (req, res) {
@@ -11,14 +13,32 @@ app.get("/user", function (req, res) {
 app.post("/user", function (req, res) {
   let body = req.body;
 
-  if (body.name === undefined) {
-    res.status(400).json({
-      done: false,
-      message: "The name parameter is mandatory",
+  let user = new User({
+    name: body.name,
+    email: body.email,
+    password: bcrypt.hashSync(body.password, 10),
+    image: body.image,
+    role: body.role,
+    state: body.state,
+    google: body.google,
+  });
+
+  user.save((error, userDB) => {
+    if (error) {
+      return res.status(400).json({
+        done: false,
+        error,
+      });
+    }
+
+    // doesn't show the password to the user
+    userDB.password = null;
+
+    res.json({
+      done: true,
+      user: userDB,
     });
-  } else {
-    res.json(body);
-  }
+  });
 });
 
 // PUT //
