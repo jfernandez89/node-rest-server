@@ -44,7 +44,31 @@ app.post("/user", function (req, res) {
 // PUT //
 app.put("/user/:id", function (req, res) {
   let id = req.params.id;
-  res.json({ id });
+  let body = req.body;
+
+  // Removes these properties, to avoid update of them
+  delete body.password;
+  delete body.google;
+
+  // Returns the updated user
+  User.findByIdAndUpdate(
+    id,
+    body,
+    { new: true, runValidators: true },
+    (error, userDB) => {
+      if (error) {
+        return res.status(400).json({
+          done: false,
+          error,
+        });
+      }
+
+      res.json({
+        done: true,
+        userDB,
+      });
+    }
+  );
 });
 
 // DELETE //
